@@ -11,7 +11,8 @@ Not super efficient right now, loads everything into the pixel-agents. Could loa
 Examples:
 
 http://gfycat.com/KaleidoscopicUglyGrouse
-http://gfycat.com/WhiteUntimelyClumber|
+
+http://gfycat.com/WhiteUntimelyClumber
 
 Line mode:
 http://gfycat.com/SplendidAnyBumblebee
