@@ -1,8 +1,3 @@
-final static int ALPHA = 24; 
-final static int RED = 16;
-final static int GREEN = 8;
-final static int BLUE = 0;
-
 float getColourValue(color c){
   if (COLOUR_MODE ==GREEN ){
     return ((c >>GREEN) &0xFF) +0.001* ((c >>RED) &0xFF)+ 0.000001 *((c >>BLUE) &0xFF);

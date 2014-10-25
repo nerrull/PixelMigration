@@ -63,15 +63,12 @@ class PixelAgent{
         incY = (height + (m_destination.y - m_origin.y ))/m_iterations;
       break;
     }
-    //incX += 1;
-    //incY +=1;
   
     if(m_iterCount >= m_iterations)
     {
       if (!m_colorSwitched)
       {
         nextColour();
-        //println("color switch");
       }
       m_currentDirection = Direction.FREE;
       incX = abs(m_pos.x - m_destination.x);
@@ -175,12 +172,14 @@ class PixelAgent{
 
   void draw(){
     stroke(m_c);
-    //line(m_pos.x, m_pos.y, m_origin.x ,m_origin.y);
-    point(m_pos.x, m_pos.y);
+    if( DRAW_MODE == POINT_MODE)
+      point(m_pos.x, m_pos.y);
+    else if (DRAW_MODE == LINE_MODE)
+      line(m_pos.x, m_pos.y, m_origin.x ,m_origin.y);
   }
 
   void checkLocation(){
-    if (/*((int)m_pos.x == (int) m_destination.x && (int) m_pos.y == (int) m_destination.y) || */m_iterCount > m_iterations + PAUSE_FRAMES)
+    if (m_iterCount > m_iterations + PAUSE_FRAMES)
     {
       m_onDestination = true;
     }
@@ -191,7 +190,7 @@ class PixelAgent{
     m_currentDirection = PIXEL_DIRECTION;
     m_onDestination = false;
     m_iterCount = 0;
-    //Check if this is deleted by remove
+
     m_origin = m_destinations.get(0);
     m_destinations.remove(0);
     m_destination = m_destinations.get(0);
@@ -200,9 +199,12 @@ class PixelAgent{
   void nextColour(){
     m_colorSwitched = true;
     m_colorCounter++;
+
     if (m_colorCounter >= m_colors.length)
       m_colorCounter = 0;
     m_c = m_colors[m_colorCounter];
+
+    
     if (TRAVEL_MODE == PIXEL_EXIT)
       m_c = color(0);
   }

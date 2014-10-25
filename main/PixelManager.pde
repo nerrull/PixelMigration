@@ -42,13 +42,13 @@ class PixelManager {
           img.loadPixels();
           colors[i] = img.pixels[n] + 0xFF000000;
           destinations.add(dest);
-          //println("hex(colors[i]): "+hex(colors[i]));
         }
 
-       if (red(colors[0]) > 200)
-          m_agentArray.add(new PixelAgent(origin,destinations,colors, m_numIterations));
+        m_agentArray.add(new PixelAgent(origin,destinations,colors, m_numIterations));
       }
     } 
+
+    println("Number of pixel agents : " + m_agentArray.count());
   }
 
   public void update() {
