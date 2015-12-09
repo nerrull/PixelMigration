@@ -8,6 +8,7 @@ class PixelAgent{
   float m_iterations = 50.0f;
   int m_iterCount =0;
   float incX, incY;
+  float m_increment;
 
   Direction m_currentDirection;
   boolean m_onDestination = false;
@@ -22,19 +23,20 @@ class PixelAgent{
     m_c = colors[0];
     m_colorCounter = 0;
     m_currentDirection = PIXEL_DIRECTION;
+    m_increment = 0;
+    getIncrement();
     if (TRAVEL_MODE == PIXEL_ENTER)
       m_c = color(0);
     draw();
   }
 
   void update(){
-    checkLocation();
     move();
     draw();
   }
 
   void move(){
-    getIncrement();
+
     moveX();
     moveY();
     m_iterCount++;
@@ -117,6 +119,11 @@ class PixelAgent{
   }
 
   void moveXfree(){
+    if (((m_iterCount +1) %NUM_ITERATIONS) == 0){
+      m_pos.x = m_destination.x;
+      //nextColour();
+      return;
+    }
       if (m_pos.x > m_destination.x){
         m_pos.x -= incX;
       }
@@ -126,6 +133,10 @@ class PixelAgent{
   }
 
   void moveYfree(){
+    if (((m_iterCount+1) %NUM_ITERATIONS) == 0){
+      m_pos.y = m_destination.y;
+      return;
+    }
       if (m_pos.y > m_destination.y){
         m_pos.y -= incY;
       }
@@ -139,7 +150,7 @@ class PixelAgent{
     m_pos.x += incX;
     if(m_pos.x >= width){
       m_pos.x = incX -(width-tmpX);
-      nextColour();
+      //nextColour();
     }
   }
 
@@ -148,7 +159,7 @@ class PixelAgent{
     m_pos.x -= incX;
     if(m_pos.x < 0){
       m_pos.x = width - (incX -tmpX);
-      nextColour();
+      //nextColour();
     }
   }
 
@@ -157,7 +168,7 @@ class PixelAgent{
     m_pos.y -= incY;
     if(m_pos.y < 0){
       m_pos.y = height - (incY - tmpY);
-      nextColour();
+      //nextColour();
     }
   }
 
@@ -166,7 +177,7 @@ class PixelAgent{
     m_pos.y += incY;
     if(m_pos.y >= height){
       m_pos.y = incY - (height-tmpY);
-      nextColour();
+      //nextColour();
     }
   }
 
@@ -178,15 +189,9 @@ class PixelAgent{
       line(m_pos.x, m_pos.y, m_origin.x ,m_origin.y);
   }
 
-  void checkLocation(){
-    if (m_iterCount > m_iterations + PAUSE_FRAMES)
-    {
-      m_onDestination = true;
-    }
-  }
+
 
   void nextImage(){
-    m_colorSwitched = false;
     m_currentDirection = PIXEL_DIRECTION;
     m_onDestination = false;
     m_iterCount = 0;
@@ -197,9 +202,7 @@ class PixelAgent{
   }
 
   void nextColour(){
-    m_colorSwitched = true;
     m_colorCounter++;
-
     if (m_colorCounter >= m_colors.length)
       m_colorCounter = 0;
     m_c = m_colors[m_colorCounter];
@@ -208,4 +211,17 @@ class PixelAgent{
     if (TRAVEL_MODE == PIXEL_EXIT)
       m_c = color(0);
   }
+
+
+  void fadeColour(int i, int steps){
+    color n_c = m_colors[(m_colorCounter+1) %m_colors.length];
+
+    color d_c;
+    d_c = lerpColor(m_c, n_c, i *1.0/float(steps));
+
+    stroke(d_c);
+    point(m_pos.x, m_pos.y);
+   
+  }
+
 };

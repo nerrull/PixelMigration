@@ -4,6 +4,7 @@ class PixelManager {
   int m_modFactor;
   int m_numIterations;
   boolean m_switchImageTrigger = false;
+  boolean m_fade_trigger = false;
 
   public PixelManager (ImageHandler imgHandler, int modFactor,int numIterations) {
     m_imageHandler = imgHandler;
@@ -48,25 +49,68 @@ class PixelManager {
       }
     } 
 
-    println("Number of pixel agents : " + m_agentArray.count());
+    //println("Number of pixel agents : " + m_agentArray.length());
   }
 
+  int fadeCounter =0;
+  int iterCount =0;
+  boolean  next_triggered =false;
   public void update() {
     boolean onDest = true;
-    for (PixelAgent pa : m_agentArray) {
-      if (m_switchImageTrigger){
-        pa.nextImage();
-      }
+
+    if (REFRESH_BACKGROUND && iterCount <= m_numIterations)
+    {
+      background(BACKGROUND_COLOR);
+    }
+    if (!(iterCount > m_numIterations + FADE_FRAMES) || m_switchImageTrigger)
+      for (PixelAgent pa : m_agentArray) {
+        if (next_triggered){
+          pa.nextColour();
+        }
+        if (m_switchImageTrigger){
+          pa.nextImage();
+        }
+
+        if (iterCount >= m_numIterations )
+        {
+          if( iterCount < m_numIterations +FADE_FRAMES)
+          {
+            pa.fadeColour(iterCount - m_numIterations, FADE_FRAMES);
+            continue;
+          }
+        }
+    
       pa.update();
-      onDest = (onDest && pa.m_onDestination);
+
     }
 
-    if (onDest){
-      println("Next Image");
-      m_switchImageTrigger =true;
+
+
+    if (next_triggered)
+    {
+      next_triggered = false;
     }
-    else{
+
+    if (m_switchImageTrigger)
+    {
       m_switchImageTrigger = false;
     }
+
+    if (iterCount == (m_numIterations +FADE_FRAMES -1)){
+        print("next_colour loaded");
+        next_triggered =true;
+    } 
+
+
+    if (iterCount > m_numIterations + FADE_FRAMES +PAUSE_FRAMES)
+      {
+        println("next_image triggered ");
+        m_switchImageTrigger = true;
+        iterCount=0;
+        return;
+    }
+    iterCount +=1;
+
   }
+  
 }
