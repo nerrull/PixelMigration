@@ -31,7 +31,7 @@ class ImageHandler {
         println("Dimensions: "+imageWidth + 'x'+ imageHeight);
         println("Array size:" + m_arraySize);
         if (m_arraySize > 1000000){
-          println("Bigass picture, go grab some popcorn or something ");
+          println("Pretty big image, this could take a while ");
         }
       }
       tmpImage.resize(imageWidth, imageHeight);
